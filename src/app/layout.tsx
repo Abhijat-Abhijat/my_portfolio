@@ -21,7 +21,7 @@ const spaceGrotesk = Space_Grotesk({
 // Site content (hero text, contact links, etc. shown ON the page) is editable
 // via /admin — these SEO/OG fallback strings are a source-code-only edit.
 const SITE_NAME = "Abhijat";
-const SITE_URL = "https://abhijat.co.in";
+const SITE_URL = "https://www.abhijat.co.in";
 const SITE_TITLE = `${SITE_NAME} — AI Engineer & Full-Stack Software Engineer`;
 const SITE_DESCRIPTION =
   "AI engineer and full-stack developer building production systems, intelligent workflows, and developer tools — and sharing what I learn along the way.";

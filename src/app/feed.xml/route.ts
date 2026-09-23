@@ -1,7 +1,7 @@
 import { getArticles } from "@/lib/content/articles";
 
 const SITE_NAME = "Abhijat";
-const SITE_URL = "https://abhijat.co.in";
+const SITE_URL = "https://www.abhijat.co.in";
 const SITE_DESCRIPTION = "Notes on AI engineering, software systems, and developer tools.";
 
 function escapeXml(value: string) {
