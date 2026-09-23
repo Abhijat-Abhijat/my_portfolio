@@ -47,6 +47,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Check Vercel secrets
+        run: |
+          for v in VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID; do
+            [ -n "${!v}" ] || { echo "::error::$v is empty. Add it under Settings > Secrets > Actions > Repository secrets."; exit 1; }
+          done
       - run: npx vercel pull --yes --environment=preview
       - run: npx vercel build
       - name: Deploy preview
@@ -71,6 +76,11 @@ jobs:
         with:
           node-version: 22
       # Runtime env vars (Supabase, ADMIN_*) live in the Vercel project settings.
+      - name: Check Vercel secrets
+        run: |
+          for v in VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID; do
+            [ -n "${!v}" ] || { echo "::error::$v is empty. Add it under Settings > Secrets > Actions > Repository secrets."; exit 1; }
+          done
       - run: npx vercel pull --yes --environment=production
       - run: npx vercel build --prod
       - name: Deploy
