@@ -3,7 +3,9 @@
 # portfolio — repo rules
 
 Personal portfolio site for Abhijat (AI Engineer / Full-Stack Software Engineer).
-Next.js (App Router) + Tailwind v4 + `@react-three/fiber` (Three.js) for the hero visual.
+Next.js (App Router) + Tailwind v4. Light theme by default (dark via toggle). Hero avatars are
+optional static art in `public/avatars/{thinking,building,notes,details}.webp` — a missing
+file just hides that pose (`src/components/hero-avatars.tsx`).
 Content is stored in Supabase (Postgres + Storage) and edited through a built-in
 admin panel at `/admin`. Independent repo — part of the `leapath` umbrella workspace,
 but not part of the `leapath-platform` / `MS-Assessments` contract.

@@ -60,7 +60,7 @@ function Terminal() {
     "[ 0.0203 ] kernel: handoff complete",
   ];
   return (
-    <Frame className="bg-[#0d0d0f]">
+    <Frame className="bg-[#0d0d0f]!">
       <div className="w-[86%] font-mono text-[11px] leading-relaxed text-left text-[#8fe3a1]">
         {lines.map((line, i) => (
           <p key={i} className="truncate">

@@ -1,42 +1,44 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #0a0a0b;
-  --bg-elevated: #121214;
-  --bg-elevated-2: #17171a;
-  --fg: #f2f1ec;
-  --fg-muted: #9a9aa2;
-  /* #7e7e86, not the original #63636b — that failed WCAG AA (~3.2:1) for the
-     small-text captions/labels this token is actually used for; this hits
-     ~4.6-4.9:1 against both --bg and --bg-elevated while keeping the same
-     cool undertone and staying visibly the dimmest of the three text tones. */
-  --fg-faint: #7e7e86;
-  --border: #232327;
-  --border-strong: #33333a;
-  --accent: #3d7dff;
-  --accent-fg: #071022;
-  --accent-soft: rgba(61, 125, 255, 0.12);
-  /* Tailwind's red-400 — 7.15:1 on --bg. Same shade fails WCAG AA (2.63:1) in
-     light mode (see [data-theme="light"] below), so this is a token, not a
-     literal red-400 class, at every call site. */
-  --danger: #f87171;
+  /* Light is the default theme: warm off-white page, near-black ink, one burnt-orange
+     accent. #d53b0b, not the brighter #f24f1b — the bright one only manages ~3.3:1 on
+     the page, too low for the small eyebrow labels this token colors. */
+  --bg: #fdfdfc;
+  --bg-elevated: #f4f4f0;
+  --bg-elevated-2: #ecebe6;
+  --fg: #121210;
+  --fg-muted: #505b6c;
+  --fg-faint: #687386;
+  --border: rgb(18 18 16 / 10%);
+  --border-strong: rgb(18 18 16 / 18%);
+  --accent: #d53b0b;
+  --accent-fg: #ffffff;
+  --accent-soft: rgba(213, 59, 11, 0.1);
+  /* Handwritten margin notes only — decorative, always aria-hidden. */
+  --note: #7c5cd6;
+  --shadow: rgb(43 39 32 / 12%);
+  /* Tailwind's red-700 — 6.15:1 on --bg (red-400 only manages 2.63:1 here), so this
+     is a token, not a literal red-* class, at every call site. */
+  --danger: #b91c1c;
 }
 
-[data-theme="light"] {
-  --bg: #faf9f6;
-  --bg-elevated: #f1efe9;
-  --bg-elevated-2: #e9e6de;
-  --fg: #17171a;
-  --fg-muted: #55555c;
-  /* Same WCAG AA fix as the dark theme's --fg-faint — see note above. */
-  --fg-faint: #68686f;
-  --border: #e1ddd3;
-  --border-strong: #cfc9bc;
-  --accent: #1d5fe0;
-  --accent-fg: #ffffff;
-  --accent-soft: rgba(29, 95, 224, 0.1);
-  /* Tailwind's red-700 — 6.15:1 on --bg (red-400 only manages 2.63:1 here). */
-  --danger: #b91c1c;
+[data-theme="dark"] {
+  --bg: #0f0f0e;
+  --bg-elevated: #171715;
+  --bg-elevated-2: #1f1f1c;
+  --fg: #f2f1ec;
+  --fg-muted: #a3a39c;
+  --fg-faint: #85857e;
+  --border: rgb(242 241 236 / 10%);
+  --border-strong: rgb(242 241 236 / 18%);
+  --accent: #ff6a3d;
+  --accent-fg: #160700;
+  --accent-soft: rgba(255, 106, 61, 0.14);
+  --note: #a993f0;
+  --shadow: rgb(0 0 0 / 45%);
+  /* Tailwind's red-400 — 7.15:1 on --bg. */
+  --danger: #f87171;
 }
 
 @theme inline {
@@ -52,9 +54,11 @@
   --color-accent-fg: var(--accent-fg);
   --color-accent-soft: var(--accent-soft);
   --color-danger: var(--danger);
+  --color-note: var(--note);
 
-  --font-display: var(--font-instrument-serif);
-  --font-sans: var(--font-space-grotesk);
+  --font-display: var(--font-geist);
+  --font-sans: var(--font-geist);
+  --font-hand: var(--font-caveat);
 }
 
 * {
@@ -69,6 +73,18 @@ html {
 body {
   background: var(--bg);
   color: var(--fg);
+}
+
+/* Display type is the same grotesk as body, just heavy and tight — set here (base
+   layer) so any font-weight / tracking utility at a call site still wins. */
+@layer base {
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
 }
 
 ::selection {
@@ -159,8 +175,130 @@ body {
 }
 
 .grain-noise {
-  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.035) 1px, transparent 0);
+  background-image: radial-gradient(circle at 1px 1px, var(--border) 1px, transparent 0);
   background-size: 3px 3px;
+}
+
+/* Underlined text link — the site's primary call to action style. */
+.link-underline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.35rem;
+  font-weight: 600;
+  color: var(--fg);
+  background: linear-gradient(var(--accent), var(--accent)) left bottom / 100% 2px no-repeat;
+  transition: background-size 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
+}
+.link-underline:hover {
+  color: var(--accent);
+  background-size: 40% 2px;
+}
+.link-underline:active {
+  transform: translateY(1px);
+}
+
+/* Slow orbiting marker behind the hero. */
+@keyframes orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.orbit {
+  animation: orbit 28s linear infinite;
+}
+
+/* Hero avatars: one pose at a time pops in, drifts, then steps out for the next. */
+.avatar {
+  opacity: 0;
+  transform: translate3d(0, 1.25rem, 0) scale(0.84);
+  transition: opacity 620ms ease, transform 760ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.avatar.is-visible {
+  opacity: 1;
+  transform: none;
+}
+.avatar.is-exiting {
+  opacity: 0;
+  transform: translate3d(0, -0.75rem, 0) scale(0.92);
+}
+@keyframes avatar-drift {
+  to {
+    transform: translate3d(0, -0.6rem, 0) rotate(-1.2deg);
+  }
+}
+.avatar-media {
+  filter: drop-shadow(0 1.3rem 1.25rem var(--shadow));
+  animation: avatar-drift 5.8s ease-in-out infinite alternate;
+}
+
+/* Skills: infinite marquee rows (content is duplicated, so -50% loops seamlessly). */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee 48s linear infinite;
+}
+.marquee-reverse {
+  animation-direction: reverse;
+  animation-duration: 56s;
+}
+.marquee-mask:hover .marquee-track {
+  animation-play-state: paused;
+}
+.marquee-mask {
+  mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+}
+
+/* Skills: chips spring in one after another. */
+@keyframes chip-pop {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.85) rotate(-3deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.chip-pop {
+  opacity: 0;
+  animation: chip-pop 520ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Skills: active tab underline fills while the explorer auto-cycles. */
+@keyframes skill-progress {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+.skill-progress {
+  animation: skill-progress linear forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+  .chip-pop {
+    opacity: 1;
+    animation: none;
+  }
+}
+
+/* Certification seal: text ring spins while its card is hovered. */
+.seal-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: orbit 10s linear infinite paused;
+}
+.group:hover .seal-ring {
+  animation-play-state: running;
 }
 
 .font-tabular {

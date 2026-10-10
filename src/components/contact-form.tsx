@@ -23,7 +23,7 @@ export function ContactForm() {
   }
 
   const inputClass =
-    "mt-1.5 w-full rounded-lg border border-border bg-bg-elevated px-3.5 py-2.5 text-sm text-fg outline-none focus-visible:border-accent";
+    "mt-1.5 w-full rounded-lg border border-border bg-bg px-3.5 py-3 text-base text-fg outline-none transition-colors focus-visible:border-accent";
 
   return (
     <form action={formAction} className="space-y-5 text-left">
@@ -37,13 +37,13 @@ export function ContactForm() {
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="name" className="text-sm text-fg-muted">
+          <label htmlFor="name" className="text-sm font-medium text-fg-muted">
             Name
           </label>
           <input id="name" name="name" type="text" required maxLength={200} className={inputClass} />
         </div>
         <div>
-          <label htmlFor="email" className="text-sm text-fg-muted">
+          <label htmlFor="email" className="text-sm font-medium text-fg-muted">
             Email
           </label>
           <input id="email" name="email" type="email" required maxLength={200} className={inputClass} />
@@ -51,7 +51,7 @@ export function ContactForm() {
       </div>
 
       <div>
-        <label htmlFor="message" className="text-sm text-fg-muted">
+        <label htmlFor="message" className="text-sm font-medium text-fg-muted">
           Message
         </label>
         <textarea
@@ -71,9 +71,9 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={isPending || renderedAt === null}
-        className="group inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3 text-sm font-medium text-accent-fg transition-transform hover:-translate-y-0.5 disabled:opacity-60 disabled:hover:translate-y-0"
+        className="group inline-flex items-center gap-3 rounded-full bg-fg px-7 py-3.5 text-sm font-semibold text-bg transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:bg-accent active:translate-y-0 active:scale-[0.98] disabled:opacity-60 disabled:hover:translate-y-0"
       >
-        {isPending ? "Sending…" : "Send message"}
+        {isPending ? "Sending…" : "Say hello"}
         <span aria-hidden="true" className="transition-transform group-hover:translate-x-0.5">
           →
         </span>

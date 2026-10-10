@@ -34,7 +34,7 @@ export default async function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
       />
-      <Hero githubUrl={settings.github} />
+      <Hero name={settings.name} role={settings.role} githubUrl={settings.github} />
       <SelectedWork />
       <About />
       <ExperienceTimeline limit={3} />
@@ -42,7 +42,7 @@ export default async function Home() {
       <Writing />
       <Publications />
       <Certifications limit={3} />
-      <Achievements limit={2} />
+      <Achievements limit={4} />
       <Contact />
     </>
   );

@@ -46,14 +46,14 @@ export async function Publications() {
   const publications = await getPublications();
 
   return (
-    <section id="publications" className="scroll-mt-24 border-t border-border py-24 md:py-32">
+    <section id="publications" className="scroll-mt-24 py-24 md:py-32">
       <div className="container-page">
         <SectionHeading eyebrow="Publications" title="Writing beyond the web." />
 
         <div className="mt-14 grid gap-5 md:grid-cols-3">
           {publications.map((pub, i) => (
             <Reveal key={pub.id} delay={i * 80}>
-              <div className="flex h-full flex-col rounded-2xl border border-border p-6">
+              <div className="flex h-full flex-col rounded-2xl bg-bg-elevated p-7 transition-transform duration-300 hover:-translate-y-1">
                 <div className="flex items-center gap-2 text-accent">
                   <KindIcon kind={pub.kind} />
                   <span className="font-mono text-xs uppercase tracking-wide">

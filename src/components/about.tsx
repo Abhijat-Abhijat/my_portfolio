@@ -3,7 +3,7 @@ import { SectionHeading } from "@/components/section-heading";
 
 export function About() {
   return (
-    <section id="about" className="scroll-mt-24 border-t border-border py-24 md:py-32">
+    <section id="about" className="scroll-mt-24 py-24 md:py-32">
       <div className="container-page grid gap-10 md:grid-cols-[0.9fr_1.1fr] md:gap-16">
         <SectionHeading eyebrow="About" title="I like building things that are useful." />
 

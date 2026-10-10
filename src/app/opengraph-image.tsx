@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { BRAND, MARK_A_PATH, MARK_DOT, MARK_VIEWBOX } from "@/lib/brand";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -17,20 +18,26 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "center",
           padding: "80px",
-          background: "#0a0a0b",
-          color: "#f2f1ec",
+          background: BRAND.paper,
+          color: BRAND.ink,
           fontFamily: "sans-serif",
         }}
       >
-        <span style={{ fontSize: 22, letterSpacing: 4, color: "#3d7dff", textTransform: "uppercase" }}>
-          {SITE_NAME}
-        </span>
-        <span style={{ fontSize: 62, marginTop: 24, fontWeight: 600, maxWidth: 900, lineHeight: 1.1 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+          <svg width={64} height={64} viewBox={MARK_VIEWBOX}>
+            <rect width="32" height="32" rx="9" fill={BRAND.ink} />
+            <path d={MARK_A_PATH} fill={BRAND.paper} fillRule="evenodd" />
+            <circle cx={MARK_DOT.cx} cy={MARK_DOT.cy} r={MARK_DOT.r} fill={BRAND.accent} />
+          </svg>
+          <span style={{ fontSize: 34, fontWeight: 700, letterSpacing: -1 }}>
+            {SITE_NAME}
+            <span style={{ color: BRAND.accent }}>.</span>
+          </span>
+        </div>
+        <span style={{ fontSize: 68, marginTop: 48, fontWeight: 700, maxWidth: 940, lineHeight: 1.05, letterSpacing: -2 }}>
           I build useful software and AI products.
         </span>
-        <span style={{ fontSize: 26, marginTop: 28, color: "#9a9aa2", maxWidth: 820 }}>
-          {SITE_ROLE}
-        </span>
+        <span style={{ fontSize: 26, marginTop: 28, color: "#505b6c", maxWidth: 820 }}>{SITE_ROLE}</span>
       </div>
     ),
     { ...size }

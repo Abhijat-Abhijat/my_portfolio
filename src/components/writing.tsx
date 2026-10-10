@@ -10,7 +10,7 @@ export async function Writing() {
   const featured = articles.slice(0, FEATURED_COUNT);
 
   return (
-    <section id="writing" className="scroll-mt-24 border-t border-border py-24 md:py-32">
+    <section id="writing" className="scroll-mt-24 py-24 md:py-32">
       <div className="container-page">
         <SectionHeading
           eyebrow="Writing"

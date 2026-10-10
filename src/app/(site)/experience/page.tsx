@@ -30,7 +30,9 @@ export default function ExperienceIndexPage() {
         </div>
       </header>
 
-      <ExperienceTimeline />
+      <div className="pb-24 md:pb-32">
+        <ExperienceTimeline standalone />
+      </div>
     </article>
   );
 }

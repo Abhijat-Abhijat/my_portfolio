@@ -31,7 +31,7 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
       {filtered.length === 0 ? (
         <p className="mt-8 text-sm text-fg-muted">No projects match &ldquo;{query}&rdquo;.</p>
       ) : (
-        <div className="mt-8 grid gap-6 md:grid-cols-2">
+        <div className="mt-12 grid gap-x-12 gap-y-20 md:grid-cols-2">
           {filtered.map((project, i) => (
             <ProjectCard key={project.slug} project={project} delay={(i % 2) * 90} />
           ))}

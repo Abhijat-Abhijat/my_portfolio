@@ -14,16 +14,16 @@ export async function Achievements({
   const truncated = limit != null && allRest.length > limit;
 
   return (
-    <section id="achievements" className="scroll-mt-24 border-t border-border py-24 md:py-32">
+    <section id="achievements" className="scroll-mt-24 py-24 md:py-32">
       <div className="container-page">
         {!standalone && (
           <SectionHeading eyebrow="Achievements" title="A few things I've learned the hard way." />
         )}
 
-        <div className={standalone ? "grid gap-5 md:grid-cols-3" : "mt-14 grid gap-5 md:grid-cols-3"}>
+        <div className={standalone ? "grid gap-5 sm:grid-cols-2 lg:grid-cols-4" : "mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"}>
           {featured && (
-            <Reveal className="md:col-span-3">
-              <div className="relative overflow-hidden rounded-2xl border border-border-strong bg-bg-elevated p-8 md:p-12">
+            <Reveal className="col-span-full">
+              <div className="relative overflow-hidden rounded-2xl bg-bg-elevated p-8 md:p-12">
                 <div
                   className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full opacity-20 blur-3xl"
                   style={{ background: "var(--accent)" }}
@@ -42,7 +42,7 @@ export async function Achievements({
 
           {rest.map((achievement, i) => (
             <Reveal key={achievement.id} delay={i * 70}>
-              <div className="flex h-full flex-col justify-between rounded-2xl border border-border p-6">
+              <div className="flex h-full flex-col justify-between rounded-2xl bg-bg-elevated p-7 transition-transform duration-300 hover:-translate-y-1">
                 <h3 className="font-display text-xl tracking-tight text-fg">
                   {achievement.title}
                 </h3>
