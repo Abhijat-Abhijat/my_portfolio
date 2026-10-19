@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { PageHead } from "@/components/page-head";
+import { Notebook } from "@/components/writing";
 import { getArticles } from "@/lib/content/articles";
-import { ArticlesList } from "@/components/articles-list";
 
 export const dynamic = "force-dynamic";
 
@@ -15,32 +15,15 @@ export default async function BlogIndexPage() {
 
   return (
     <article>
-      <header className="border-b border-border pt-16 pb-12 md:pt-24 md:pb-14">
-        <div className="container-page">
-          <Link
-            href="/#writing"
-            className="inline-flex items-center gap-1.5 text-sm text-fg-muted transition-colors hover:text-fg"
-          >
-            ← Back home
-          </Link>
-
-          <p className="mt-8 font-sans text-xs font-medium uppercase tracking-[0.24em] text-accent">
-            Writing
-          </p>
-          <h1 className="mt-4 text-balance font-display text-4xl tracking-tight text-fg sm:text-5xl md:text-6xl">
-            Everything I&rsquo;ve written
-          </h1>
-          <p className="mt-4 max-w-2xl text-balance text-lg leading-relaxed text-fg-muted">
-            Notes on AI engineering, software systems, developer tools, and the lessons that only show up after you ship. {articles.length} post{articles.length === 1 ? "" : "s"}.
-          </p>
-        </div>
-      </header>
-
-      <div className="container-page py-16 md:py-20">
+      <PageHead back="/#notes" backLabel="Back home" kicker="things I wrote down" title="The" ital="notebook">
+        Notes on AI engineering, software systems, developer tools, and the lessons that only show up after you ship.{" "}
+        {articles.length} post{articles.length === 1 ? "" : "s"}.
+      </PageHead>
+      <div className="container-page pb-28">
         {articles.length > 0 ? (
-          <ArticlesList articles={articles} />
+          <Notebook articles={articles} showExcerpt />
         ) : (
-          <p className="text-sm text-fg-muted">Nothing published yet — check back soon.</p>
+          <p className="font-hand text-2xl text-fg-muted">nothing published yet — check back soon.</p>
         )}
       </div>
     </article>

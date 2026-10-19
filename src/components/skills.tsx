@@ -1,32 +1,18 @@
-import { Reveal } from "@/components/reveal";
-import { SectionHeading } from "@/components/section-heading";
-import { HandNote } from "@/components/hand-note";
-import { SkillsExplorer, SkillsMarquee } from "@/components/skills-explorer";
+import { SectionHead } from "@/components/section-head";
+import { Toolbox } from "@/components/toolbox";
 import { getSkillGroups } from "@/lib/content/skills";
 
 export async function Skills() {
-  const skillGroups = await getSkillGroups();
-  const allSkills = [...new Set(skillGroups.flatMap((g) => g.skills))];
-  const total = allSkills.length;
+  const groups = await getSkillGroups();
+  if (groups.length === 0) return null;
+  const total = groups.reduce((n, g) => n + g.skills.length, 0);
 
   return (
-    <section id="skills" className="scroll-mt-24 overflow-hidden py-24 md:py-36">
-      <div className="container-page relative">
-        <SectionHeading eyebrow="Technical skills" title="The stack behind the work." />
-        <HandNote arrow="down-left" className="absolute right-4 top-2 hidden w-56 text-right md:block">
-          {total} tools, still learning
-          <br />
-          the next one.
-        </HandNote>
+    <section id="tools" className="sec scroll-mt-24" aria-labelledby="tools-h">
+      <div className="container-page">
+        <SectionHead id="tools-h" kicker="what's in the bag" title="Tool" ital="box" glue meta={`${groups.length} drawers · ${total} tools`} />
+        <Toolbox groups={groups} />
       </div>
-
-      <Reveal className="mt-14 md:mt-20">
-        <SkillsMarquee skills={allSkills} />
-      </Reveal>
-
-      <Reveal className="container-page mt-16 md:mt-24">
-        <SkillsExplorer groups={skillGroups} />
-      </Reveal>
     </section>
   );
 }

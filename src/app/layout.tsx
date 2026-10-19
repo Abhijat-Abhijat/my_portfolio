@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Caveat, Geist } from "next/font/google";
+import { Caveat, Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
@@ -8,7 +8,20 @@ const geist = Geist({
   subsets: ["latin"],
 });
 
-// Handwritten margin notes only.
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+// Editorial display face — headings, the hero, the big "Say hello."
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+});
+
+// Handwritten voice: kickers, tape labels, margin notes.
 const caveat = Caveat({
   variable: "--font-caveat",
   subsets: ["latin"],
@@ -76,6 +89,9 @@ const themeInitScript = `
     if (stored === 'light' || stored === 'dark') {
       document.documentElement.setAttribute('data-theme', stored);
     }
+    if (localStorage.getItem('skin') === 'hacker') {
+      document.documentElement.setAttribute('data-skin', 'hacker');
+    }
   } catch (e) {}
 })();
 `;
@@ -84,7 +100,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geist.variable} ${caveat.variable} h-full antialiased`}
+      className={`${geist.variable} ${geistMono.variable} ${instrumentSerif.variable} ${caveat.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>
@@ -94,7 +110,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="min-h-full flex flex-col font-sans">
         <noscript>
-          <style>{`.reveal, .hero-in { opacity: 1 !important; transform: none !important; animation: none !important; }`}</style>
+          <style>{`.reveal { opacity: 1 !important; transform: none !important; animation: none !important; }`}</style>
         </noscript>
         {children}
       </body>

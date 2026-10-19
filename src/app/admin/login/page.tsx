@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { login } from "@/lib/admin/auth-actions";
 
 export default async function AdminLoginPage({
@@ -9,37 +10,26 @@ export default async function AdminLoginPage({
   const next = params.next ?? "/admin";
 
   return (
-    <div className="flex min-h-[70vh] items-center justify-center px-6">
-      <form
-        action={login}
-        className="w-full max-w-sm rounded-2xl border border-border bg-bg-elevated p-8"
-      >
-        <h1 className="font-display text-2xl tracking-tight text-fg">Admin</h1>
+    <div className="grid min-h-screen items-center gap-10 px-6 py-12 md:grid-cols-[minmax(0,1fr)_minmax(0,420px)] md:px-16">
+      <div className="hidden justify-self-end md:block" aria-hidden="true">
+        <Image src="/avatars/toolbox.webp" alt="" width={640} height={640} className="sticker-img w-[min(420px,40vw)]" priority />
+      </div>
+      <form action={login} className="ink-card w-full max-w-sm justify-self-center p-8 md:justify-self-start">
+        <span className="kicker">back to the workshop</span>
+        <h1 className="text-4xl leading-tight text-fg">Admin</h1>
         <p className="mt-1 text-sm text-fg-muted">Sign in to edit site content.</p>
 
         <input type="hidden" name="next" value={next} />
 
-        <label className="mt-6 block text-sm text-fg-muted" htmlFor="password">
+        <label className="mt-6 block text-sm font-semibold text-fg-muted" htmlFor="password">
           Password
         </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          required
-          autoFocus
-          className="mt-1.5 w-full rounded-lg border border-border bg-bg px-3 py-2.5 text-sm text-fg outline-none focus-visible:border-accent"
-        />
+        <input id="password" name="password" type="password" required autoFocus className="field-ink" />
 
-        {params.error && (
-          <p className="mt-3 text-sm text-danger">Wrong password. Try again.</p>
-        )}
+        {params.error && <p className="mt-3 text-sm text-danger">Wrong password. Try again.</p>}
 
-        <button
-          type="submit"
-          className="mt-6 w-full rounded-full bg-accent px-4 py-2.5 text-sm font-medium text-accent-fg"
-        >
-          Sign in
+        <button type="submit" className="btn-ink mt-6 w-full justify-center">
+          Sign in <span aria-hidden="true">→</span>
         </button>
       </form>
     </div>

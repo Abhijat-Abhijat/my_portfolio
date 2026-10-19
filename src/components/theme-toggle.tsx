@@ -1,50 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { revealFrom } from "@/lib/site-events";
 
+/** Light/dark with a circular View-Transition reveal from the button. */
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<"dark" | "light">("light");
-
-  useEffect(() => {
-    const current = document.documentElement.getAttribute("data-theme");
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- syncing from the DOM attribute set by the theme-init script, unavailable during SSR
-    setTheme(current === "dark" ? "dark" : "light");
-  }, []);
-
-  function toggle() {
-    const next = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    document.documentElement.setAttribute("data-theme", next);
-    window.localStorage.setItem("theme", next);
+  function toggle(e: React.MouseEvent<HTMLButtonElement>) {
+    const b = e.currentTarget.getBoundingClientRect();
+    revealFrom(
+      () => {
+        const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
+        try {
+          window.localStorage.setItem("theme", next);
+        } catch {}
+      },
+      b.x + b.width / 2,
+      b.y + b.height / 2
+    );
   }
 
   return (
-    <button
-      type="button"
-      onClick={toggle}
-      aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-fg-muted transition-colors hover:bg-bg-elevated hover:text-fg active:scale-95"
-    >
-      {theme === "dark" ? (
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <circle cx="12" cy="12" r="4.5" stroke="currentColor" strokeWidth="1.6" />
-          <path
-            d="M12 2.5v2.5M12 19v2.5M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2.5 12H5M19 12h2.5M4.2 19.8L6 18M18 6l1.8-1.8"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-          />
-        </svg>
-      ) : (
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path
-            d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinejoin="round"
-          />
-        </svg>
-      )}
+    <button type="button" onClick={toggle} aria-label="Toggle light / dark" title="Light / dark" className="icon-btn">
+      <span aria-hidden="true">◐</span>
     </button>
   );
 }

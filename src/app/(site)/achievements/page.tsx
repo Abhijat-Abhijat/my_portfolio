@@ -1,37 +1,32 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { PageHead } from "@/components/page-head";
 import { Achievements } from "@/components/achievements";
+import { Publications } from "@/components/publications";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Achievements",
-  description: "A few things I've learned the hard way.",
+  description: "Awards, recognition, papers and books.",
 };
 
 export default function AchievementsIndexPage() {
   return (
     <article>
-      <header className="border-b border-border pt-16 pb-12 md:pt-24 md:pb-14">
-        <div className="container-page">
-          <Link
-            href="/#achievements"
-            className="inline-flex items-center gap-1.5 text-sm text-fg-muted transition-colors hover:text-fg"
-          >
-            ← Back home
-          </Link>
-
-          <p className="mt-8 font-sans text-xs font-medium uppercase tracking-[0.24em] text-accent">
-            Achievements
-          </p>
-          <h1 className="mt-4 text-balance font-display text-4xl tracking-tight text-fg sm:text-5xl md:text-6xl">
-            Everything, not just the highlights
-          </h1>
-        </div>
-      </header>
-
-      <div className="pb-16 md:pb-20">
-        <Achievements standalone />
+      <PageHead back="/#about" backLabel="Back home" kicker="things I'm quietly proud of" title="Achievements" ital="& papers" />
+      <div className="container-page grid gap-[clamp(80px,10vw,140px)] pb-28">
+        <Achievements />
+        <section aria-labelledby="pubs-h">
+          <span className="kicker">in print</span>
+          <h2 id="pubs-h" className="h2 mb-10">
+            Papers <span className="ital mc">& books</span>
+          </h2>
+          <Publications />
+        </section>
+        <Link href="/certifications" className="btn-more w-fit">
+          See certifications →
+        </Link>
       </div>
     </article>
   );

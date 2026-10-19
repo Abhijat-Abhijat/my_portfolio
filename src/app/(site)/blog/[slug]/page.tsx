@@ -13,11 +13,7 @@ const SITE_NAME = "Abhijat";
 // Content lives in Supabase and can change anytime via /admin — always render fresh.
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const article = await getArticle(slug);
   if (!article) return {};
@@ -28,11 +24,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function ArticlePage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const article = await getArticle(slug);
   if (!article) notFound();
@@ -43,77 +35,47 @@ export default async function ArticlePage({
 
   return (
     <article>
-      <header className="border-b border-border pt-16 pb-12 md:pt-24 md:pb-14">
+      <header className="page-head pb-12">
         <div className="container-page">
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-1.5 text-sm text-fg-muted transition-colors hover:text-fg"
-          >
-            ← Back to Writing
+          <Link href="/blog" className="tlink text-sm">
+            ← Back to the notebook
           </Link>
-
-          <p className="mt-8 font-mono text-xs uppercase tracking-wide text-accent">
-            {article.category}
-          </p>
-          <h1 className="mt-3 text-balance font-display text-4xl tracking-tight text-fg sm:text-5xl md:text-6xl">
-            {article.title}
-          </h1>
-          <p className="mt-4 max-w-2xl text-balance text-lg leading-relaxed text-fg-muted">
-            {article.excerpt}
-          </p>
-
-          <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-fg-faint">
-            <span>{SITE_NAME}</span>
-            <span aria-hidden="true">·</span>
-            <span>{article.date}</span>
-            <span aria-hidden="true">·</span>
-            <span>{article.readingTime}</span>
-            <span aria-hidden="true">·</span>
-            <span>{article.views + 1} view{article.views === 0 ? "" : "s"}</span>
+          <div className="mx-auto mt-10 max-w-3xl">
+            <span className="kicker">{article.category.toLowerCase()}</span>
+            <h1 className="text-balance text-[clamp(2.4rem,5.6vw,4.4rem)] leading-[1.02]">{article.title}</h1>
+            {article.excerpt && <p className="mt-5 text-balance text-xl leading-relaxed text-fg-muted">{article.excerpt}</p>}
+            <p className="mt-6 font-hand text-xl text-fg-faint">
+              {SITE_NAME}
+              {article.date && ` · ${article.date}`}
+              {article.readingTime && ` · ${article.readingTime}`} · {article.views + 1} view{article.views === 0 ? "" : "s"} · updated{" "}
+              {formatDate(article.updatedAt)}
+            </p>
           </div>
-          <p className="mt-2 text-xs text-fg-faint">
-            Last updated {formatDate(article.updatedAt)}
-          </p>
         </div>
       </header>
 
-      <div className="container-page py-16 md:py-20">
-        <Reveal className="mx-auto max-w-3xl">
-          <ArticleHero category={article.category} imageUrl={article.imageUrl} title={article.title} />
+      <div className="container-page pb-24">
+        <Reveal className="mx-auto max-w-4xl">
+          <ArticleHero slug={article.slug} imageUrl={article.imageUrl} title={article.title} />
         </Reveal>
 
         <div className="mx-auto mt-14 max-w-3xl">
-          <Reveal>
-            <div
-              className="markdown-body"
-              dangerouslySetInnerHTML={{ __html: html }}
-            />
-          </Reveal>
+          <div className="markdown-body" dangerouslySetInnerHTML={{ __html: html }} />
 
           {article.tags.length > 0 && (
-            <Reveal className="mt-14">
-              <h2 className="font-display text-2xl tracking-tight text-fg">Tags</h2>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {article.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-border px-3 py-1 font-mono text-xs text-fg-muted"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </Reveal>
+            <ul className="mt-14 flex flex-wrap gap-2" aria-label="Tags">
+              {article.tags.map((tag, i) => (
+                <li key={tag} className="tape px-3 pb-1 pt-0.5 font-hand text-xl" style={{ transform: `rotate(${i % 2 ? 1.5 : -1.5}deg)` }}>
+                  #{tag}
+                </li>
+              ))}
+            </ul>
           )}
         </div>
 
         <div className="mx-auto mt-14 max-w-3xl">
-          <p className="border-t border-border pt-8 text-sm text-fg-faint">Related posts</p>
-          <PrevNextNav
-            base="/blog"
-            previous={{ slug: previous.slug, title: previous.title }}
-            next={{ slug: next.slug, title: next.title }}
-          />
+          <p className="font-hand text-2xl text-fg-faint">keep reading —</p>
+          <PrevNextNav base="/blog" previous={{ slug: previous.slug, title: previous.title }} next={{ slug: next.slug, title: next.title }} />
         </div>
       </div>
     </article>

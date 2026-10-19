@@ -3,9 +3,13 @@
 # portfolio — repo rules
 
 Personal portfolio site for Abhijat (AI Engineer / Full-Stack Software Engineer).
-Next.js (App Router) + Tailwind v4. Light theme by default (dark via toggle). Hero avatars are
-optional static art in `public/avatars/{thinking,building,notes,details}.webp` — a missing
-file just hides that pose (`src/components/hero-avatars.tsx`).
+Next.js (App Router) + Tailwind v4. Design: warm paper + ink, "one person, four modes" —
+the hero's Designer / Builder / Human / Hacker modes (`src/lib/modes.ts`) swap the avatar
+pose, the headline verb and the site accent `--m` via `#site[data-mode]`. Light by default,
+dark via toggle, plus a "hacker" skin (`html[data-skin="hacker"]`, toggled with ` or the
+footer switch) that opens a fake CTF terminal. Avatars live in `public/avatars/*.webp`,
+drawer icons in `public/toolbox/<group-slug>.webp` (a missing file just hides the icon),
+badges in `public/badges/`. `design/award-concept.html` is the standalone design reference.
 Content is stored in Supabase (Postgres + Storage) and edited through a built-in
 admin panel at `/admin`. Independent repo — part of the `leapath` umbrella workspace,
 but not part of the `leapath-platform` / `MS-Assessments` contract.
@@ -45,8 +49,10 @@ but not part of the `leapath-platform` / `MS-Assessments` contract.
 
 ## Content model
 
-- Projects: `image_url` (real screenshot) takes precedence over the generated CSS/SVG
-  `visual` placeholder in `ProjectVisual` — same pattern for articles' `ArticleHero`.
+- Projects: `image_url` (real screenshot) takes precedence over the generated collage art
+  in `ProjectCover` (deterministic per slug) — same component backs articles' `ArticleHero`.
+  `featured` projects fill the home collage (none flagged → first four); the rest go to the
+  filterable index. The old `visual` column is unused but kept.
   Both render via `next/image` (see `next.config.ts` `images.remotePatterns` for the
   `*.supabase.co` wildcard — don't hardcode a project ref there).
 - Articles: `published` boolean gates public visibility (RLS enforces this — the public
@@ -66,6 +72,16 @@ but not part of the `leapath-platform` / `MS-Assessments` contract.
 - Admin list pages (`ReorderableList`) reorder via drag or ▲▼ buttons, persisted through
   `reorderEntities` (writes `sort_order = index` for every row) — not a `sort_order`
   number field to hand-edit anymore.
+- Hall of hackers (`hall_of_hackers`): winners of the hack-me terminal. Public read via RLS
+  `hidden = false` plus column grants that exclude `ip`; the only write path is the
+  `joinHall` server action (validation in `src/lib/hack/flags.ts`, per-IP rate limit).
+  Flags are deliberately public (it's a puzzle) — this is fun, not cheat-proof; moderate
+  via `/admin/hall`. Check the validation with `node scripts/check-hall.mts`.
+- Existing databases need `supabase/migrations/2026-10-19-modes-redesign.sql` (adds
+  `projects.featured` + the Hall table); fresh projects get it from `schema.sql`. The site
+  degrades gracefully until it runs (projects select `*`, the Hall reads as empty).
+- Shared client state (toast, motion pause, skin, mode) goes through `src/lib/site-events.ts`
+  — flip `<html>`/`#site` attributes and dispatch an event; don't add a context provider.
 - `--danger` (globals.css) exists because Tailwind's `red-400` fails WCAG AA (~2.6:1) in
   light mode — always use `text-danger`, never a literal `text-red-*` class.
 

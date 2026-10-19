@@ -1,94 +1,89 @@
 import Link from "next/link";
-import { SectionHeading } from "@/components/section-heading";
-import { ProjectVisual } from "@/components/project-visual";
-import { HandNote } from "@/components/hand-note";
-import { Reveal } from "@/components/reveal";
-import { getProjects } from "@/lib/content/projects";
-import { cn } from "@/lib/utils";
+import { SectionHead } from "@/components/section-head";
+import { ProjectCover } from "@/components/project-cover";
+import { ProjectIndex } from "@/components/project-index";
+import { getFeaturedProjects, getProjects, type Project } from "@/lib/content/projects";
 
-const FEATURED_COUNT = 4;
+const TILTS = [-2.2, 1.8, 1.2, -1.6, -1, 2];
+const pad = (n: number) => String(n).padStart(2, "0");
+const short = (category: string) => category.split(" · ")[0];
+
+export function WorkCollage({ projects }: { projects: Project[] }) {
+  return (
+    <div className="collage">
+      {projects.map((p, i) => {
+        const m = p.metrics[0];
+        const tilt = { ["--r" as string]: `${TILTS[i % TILTS.length]}deg` } as React.CSSProperties;
+        return (
+          <div key={p.slug} className="cw" style={tilt}>
+            <Link href={`/projects/${p.slug}`} className="card" style={tilt}>
+              <div className="cover">
+                <div className="cover-in">
+                  <ProjectCover project={p} index={i} />
+                </div>
+              </div>
+              <div className="mt-5 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-4 gap-y-2">
+                <span className="eyebrow-mono">
+                  {pad(i + 1)} · {short(p.category)}
+                </span>
+                {m && (
+                  <span className="badge-m row-span-2">
+                    <span>
+                      <b>{m.value}</b>
+                      {m.label}
+                    </span>
+                  </span>
+                )}
+                <h3 className="col-start-1 text-[clamp(1.8rem,2.8vw,2.5rem)] leading-none">{p.title}</h3>
+                <p className="col-span-full max-w-[46ch] text-fg-muted">{p.description}</p>
+                <span className="read-link col-span-full">
+                  Read the story <span className="arr" aria-hidden="true">↗</span>
+                </span>
+              </div>
+            </Link>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 export async function SelectedWork() {
-  const projects = await getProjects();
-  const featured = projects.slice(0, FEATURED_COUNT);
+  const [featured, all] = await Promise.all([getFeaturedProjects(), getProjects()]);
+  if (featured.length === 0) return null;
 
   return (
-    <section id="work" className="scroll-mt-24 pb-24 pt-16 md:pb-36">
+    <section id="work" className="sec scroll-mt-24" aria-labelledby="work-h">
       <div className="container-page">
-        <SectionHeading align="center" eyebrow="Selected work" title="Systems I've worked on" />
+        <SectionHead id="work-h" kicker="things I've made" title="Selected" ital="work" meta={`${pad(featured.length)} picked · ${all.length} total`} />
+        <WorkCollage projects={featured} />
+      </div>
+    </section>
+  );
+}
 
-        <div className="mt-20 space-y-28 md:mt-28 md:space-y-40">
-          {featured.map((project, i) => {
-            const flip = i % 2 === 1;
-            return (
-              <article
-                key={project.slug}
-                className="grid items-center gap-10 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-16"
-              >
-                <Reveal className={cn("md:pl-8", flip && "md:order-2 md:pl-0 md:pr-8")}>
-                  <h3 className="text-5xl leading-none tracking-[-0.04em] text-fg md:text-6xl">
-                    {project.title}
-                    <span className="text-accent">.</span>
-                  </h3>
-                  <p className="mt-6 max-w-sm text-lg leading-relaxed text-fg-muted">
-                    {project.description}
-                  </p>
-                  {project.metrics[0] && (
-                    <p className="mt-6 text-sm text-fg-muted">
-                      <span className="font-tabular text-2xl font-bold tracking-tight text-fg">
-                        {project.metrics[0].value}
-                      </span>{" "}
-                      {project.metrics[0].label}
-                    </p>
-                  )}
-                  <Link href={`/projects/${project.slug}`} className="link-underline group mt-8">
-                    View case study
-                    <span
-                      aria-hidden="true"
-                      className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                    >
-                      ↗
-                    </span>
-                  </Link>
-                </Reveal>
+/** Everything that isn't featured — filterable, collapses past `limit`. */
+export async function MoreProjects({ limit }: { limit?: number }) {
+  const [featured, all] = await Promise.all([getFeaturedProjects(), getProjects()]);
+  const featuredSlugs = new Set(featured.map((p) => p.slug));
+  const rest = all.filter((p) => !featuredSlugs.has(p.slug));
+  if (rest.length === 0) return null;
 
-                <Reveal delay={90} className={cn("relative", flip && "md:order-1")}>
-                  <HandNote
-                    arrow={flip ? "down-right" : "down-left"}
-                    className={cn(
-                      "absolute -top-16 z-10 hidden w-48 lg:block",
-                      flip ? "-left-6" : "-right-6 text-right"
-                    )}
-                  >
-                    {project.category.toLowerCase()}
-                  </HandNote>
-                  <Link
-                    href={`/projects/${project.slug}`}
-                    tabIndex={-1}
-                    aria-hidden="true"
-                    className={cn(
-                      "group block rounded-xl shadow-[0_30px_60px_-30px_var(--shadow)] transition-transform duration-500 ease-out hover:-translate-y-1.5",
-                      flip ? "md:-rotate-1" : "md:rotate-1"
-                    )}
-                  >
-                    <ProjectVisual kind={project.visual} imageUrl={project.imageUrl} alt={project.title} />
-                  </Link>
-                </Reveal>
-              </article>
-            );
-          })}
-        </div>
-
-        {projects.length > FEATURED_COUNT && (
-          <Reveal className="mt-24 text-center md:mt-32">
-            <Link href="/projects" className="link-underline group">
-              View all {projects.length} projects
-              <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-0.5">
-                →
-              </span>
-            </Link>
-          </Reveal>
-        )}
+  return (
+    <section id="index" className="sec-tight scroll-mt-24" aria-labelledby="index-h">
+      <div className="container-page">
+        <SectionHead id="index-h" kicker="and a lot more tinkering" title="Everything" ital="else" meta={`${rest.length} side projects`} />
+        <ProjectIndex
+          limit={limit}
+          items={rest.map((p, i) => ({
+            slug: p.slug,
+            n: featured.length + i + 1,
+            title: p.title,
+            category: p.category,
+            stack: p.stack,
+            metric: p.metrics[0] ? `${p.metrics[0].value} ${p.metrics[0].label}` : "",
+          }))}
+        />
       </div>
     </section>
   );

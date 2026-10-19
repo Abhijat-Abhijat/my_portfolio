@@ -1,12 +1,11 @@
 import { Hero } from "@/components/hero";
-import { SelectedWork } from "@/components/selected-work";
+import { Ribbon } from "@/components/ribbon";
+import { MoreProjects, SelectedWork } from "@/components/selected-work";
 import { About } from "@/components/about";
-import { ExperienceTimeline } from "@/components/experience-timeline";
 import { Skills } from "@/components/skills";
+import { ExperienceTimeline } from "@/components/experience-timeline";
 import { Writing } from "@/components/writing";
-import { Publications } from "@/components/publications";
-import { Certifications } from "@/components/certifications";
-import { Achievements } from "@/components/achievements";
+import { HallOfHackers } from "@/components/hall-of-hackers";
 import { Contact } from "@/components/contact";
 import { getSiteSettings } from "@/lib/content/site-settings";
 
@@ -30,19 +29,16 @@ export default async function Home() {
     <>
       {/* Structured data: helps search engines associate this page with "Abhijat" as
           a person, not just a generic keyword match. */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
-      />
-      <Hero name={settings.name} role={settings.role} githubUrl={settings.github} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
+      <Hero name={settings.name} />
+      <Ribbon />
       <SelectedWork />
+      <MoreProjects limit={6} />
       <About />
-      <ExperienceTimeline limit={3} />
       <Skills />
+      <ExperienceTimeline limit={5} />
       <Writing />
-      <Publications />
-      <Certifications limit={3} />
-      <Achievements limit={4} />
+      <HallOfHackers />
       <Contact />
     </>
   );

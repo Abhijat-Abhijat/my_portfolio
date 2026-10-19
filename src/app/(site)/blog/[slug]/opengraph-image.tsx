@@ -24,18 +24,18 @@ export default async function OpengraphImage({
           flexDirection: "column",
           justifyContent: "center",
           padding: "80px",
-          background: "#0a0a0b",
-          color: "#f2f1ec",
+          background: "#f5efe4",
+          color: "#1a1714",
           fontFamily: "sans-serif",
         }}
       >
-        <span style={{ fontSize: 20, letterSpacing: 3, color: "#3d7dff", textTransform: "uppercase" }}>
+        <span style={{ fontSize: 20, letterSpacing: 3, color: "#d6420c", textTransform: "uppercase" }}>
           {article?.category ?? SITE_NAME}
         </span>
         <span style={{ fontSize: 58, marginTop: 20, fontWeight: 600, maxWidth: 950, lineHeight: 1.1 }}>
           {article?.title ?? "Writing"}
         </span>
-        <span style={{ fontSize: 26, marginTop: 26, color: "#9a9aa2", maxWidth: 880, lineHeight: 1.4 }}>
+        <span style={{ fontSize: 26, marginTop: 26, color: "#574f46", maxWidth: 880, lineHeight: 1.4 }}>
           {article?.excerpt ?? ""}
         </span>
         <span style={{ fontSize: 20, marginTop: 40, color: "#63636b" }}>{SITE_NAME}</span>

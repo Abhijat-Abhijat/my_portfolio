@@ -142,6 +142,7 @@ export default async function EntityFormPage({
   const { entity: entityKey, id } = await params;
   const entity = getEntity(entityKey);
   if (!entity) notFound();
+  if (id === "new" && entity.creatable === false) notFound();
 
   let row: Record<string, unknown> | null = null;
   if (id !== "new") {

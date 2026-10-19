@@ -33,6 +33,7 @@ export type Project = {
   learned: string;
   links: ProjectLinks;
   limitedInfo: boolean;
+  featured: boolean;
   views: number;
   updatedAt: string;
 };
@@ -53,6 +54,7 @@ type ProjectRow = {
   link_live: string | null;
   link_github: string | null;
   limited_info: boolean;
+  featured?: boolean; // absent until the 2026-10-19 migration runs
   views: number;
   updated_at: string;
 };
@@ -76,13 +78,15 @@ function mapRow(row: ProjectRow): Project {
       github: row.link_github ?? undefined,
     },
     limitedInfo: row.limited_info,
+    featured: Boolean(row.featured),
     views: row.views,
     updatedAt: row.updated_at,
   };
 }
 
-const PROJECT_COLUMNS =
-  "slug, title, category, description, stack, visual, image_url, problem, approach, key_decisions, metrics, learned, link_live, link_github, limited_info, views, updated_at";
+// "*" rather than a column list so the site keeps working before the
+// `featured` migration has been applied to an existing database.
+const PROJECT_COLUMNS = "*";
 
 export const getProjects = cache(async (): Promise<Project[]> => {
   const supabase = getPublicSupabaseClient();
@@ -94,6 +98,13 @@ export const getProjects = cache(async (): Promise<Project[]> => {
   if (error) throw new Error(`Failed to load projects: ${error.message}`);
   return (data as ProjectRow[]).map(mapRow);
 });
+
+/** Projects for the home collage: the ones flagged featured, else the first four. */
+export async function getFeaturedProjects() {
+  const projects = await getProjects();
+  const flagged = projects.filter((p) => p.featured);
+  return flagged.length ? flagged : projects.slice(0, 4);
+}
 
 export async function getProject(slug: string): Promise<Project | undefined> {
   const projects = await getProjects();

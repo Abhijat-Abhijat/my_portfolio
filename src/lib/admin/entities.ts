@@ -37,6 +37,10 @@ export type EntityConfig = {
   filter?: Record<string, string>;
   imageField?: string;
   toggleField?: ToggleFieldConfig;
+  /** false = rows can't be drag-reordered (no sort_order column, e.g. a leaderboard). */
+  reorderable?: boolean;
+  /** false = no "New" button; rows only arrive from the public site. */
+  creatable?: boolean;
 };
 
 export const entities: EntityConfig[] = [
@@ -54,17 +58,8 @@ export const entities: EntityConfig[] = [
       { name: "category", label: "Category", type: "text", required: true },
       { name: "description", label: "Description", type: "textarea", required: true },
       { name: "stack", label: "Stack (one per line)", type: "lines" },
-      {
-        name: "visual",
-        label: "Placeholder visual (used when no image is uploaded)",
-        type: "select",
-        options: [
-          "agent-graph", "terminal", "product-ui", "dashboard", "kanban",
-          "finance", "desktop", "timer", "qr-code", "blog", "game",
-        ],
-        required: true,
-      },
-      { name: "image", label: "Screenshot", type: "image" },
+      { name: "image", label: "Screenshot (without one, a collage cover is generated)", type: "image" },
+      { name: "featured", label: "Featured — show in the home-page collage (keep 3–5)", type: "boolean" },
       { name: "problem", label: "The Problem", type: "textarea" },
       { name: "approach", label: "The Approach (one step per line)", type: "lines" },
       {
@@ -218,6 +213,23 @@ export const entities: EntityConfig[] = [
     ],
   },
 ];
+
+// Hall of hackers moderation — appended rather than slotted in, so it sits last in the sidebar.
+entities.push({
+  key: "hall",
+  label: "Hall of hackers",
+  table: "hall_of_hackers",
+  titleField: "handle",
+  subtitleField: "created_at",
+  orderBy: "score",
+  reorderable: false,
+  creatable: false,
+  toggleField: { name: "hidden", onLabel: "Hidden", offLabel: "Visible" },
+  fields: [
+    { name: "handle", label: "Handle", type: "text", required: true },
+    { name: "hidden", label: "Hidden from the public leaderboard", type: "boolean" },
+  ],
+});
 
 export function getEntity(key: string): EntityConfig | undefined {
   return entities.find((e) => e.key === key);

@@ -1,21 +1,25 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="container-page flex min-h-[70vh] flex-col items-center justify-center py-24 text-center">
-      <p className="font-mono text-xs uppercase tracking-[0.24em] text-accent">404</p>
-      <h1 className="mt-4 text-balance font-display text-4xl tracking-tight text-fg sm:text-5xl">
-        Nothing built here yet.
-      </h1>
-      <p className="mt-4 max-w-md text-balance text-base text-fg-muted">
-        That page doesn&rsquo;t exist — moved, renamed, or never was.
-      </p>
-      <Link
-        href="/"
-        className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-medium text-accent-fg transition-transform hover:-translate-y-0.5"
-      >
-        ← Back home
-      </Link>
+    <div className="container-page grid min-h-[80vh] items-center gap-10 pb-24 pt-32 md:grid-cols-2">
+      <div>
+        <span className="kicker">404 — well, this is awkward</span>
+        <h1 className="h2 text-balance">
+          Nothing built <span className="ital mc">here</span> yet.
+        </h1>
+        <p className="mt-5 max-w-md text-lg text-fg-muted">That page moved, got renamed, or never existed. Even the map is upside down.</p>
+        <div className="mt-8 flex flex-wrap items-center gap-4">
+          <Link href="/" className="btn-ink">
+            ← Take me home
+          </Link>
+          <Link href="/projects" className="tlink">
+            or browse the work
+          </Link>
+        </div>
+      </div>
+      <Image src="/avatars/lost.webp" alt="Illustrated Abhijat holding a map upside down" width={600} height={600} className="sticker-img mx-auto w-[min(100%,440px)]" priority />
     </div>
   );
 }

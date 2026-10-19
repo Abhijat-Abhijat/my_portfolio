@@ -40,20 +40,24 @@ export default async function EntityListPage({
             ← Dashboard
           </Link>
           <h1 className="mt-2 font-display text-3xl tracking-tight text-fg">{entity.label}</h1>
-          {rows.length > 1 && (
+          {rows.length > 1 && entity.reorderable !== false && (
             <p className="mt-1 text-xs text-fg-faint">Drag ⠿, or use ▲▼, to reorder.</p>
           )}
         </div>
-        <Link
-          href={`/admin/${entity.key}/new`}
-          className="rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-fg"
-        >
-          New
-        </Link>
+        {entity.creatable !== false && (
+          <Link href={`/admin/${entity.key}/new`} className="btn-ink h-10 px-5 text-sm">
+            New
+          </Link>
+        )}
       </div>
 
       <div className="mt-8">
-        <ReorderableList entityKey={entity.key} initialRows={rows} toggleField={entity.toggleField} />
+        <ReorderableList
+          entityKey={entity.key}
+          initialRows={rows}
+          toggleField={entity.toggleField}
+          reorderable={entity.reorderable !== false}
+        />
       </div>
     </div>
   );

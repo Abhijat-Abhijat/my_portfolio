@@ -69,10 +69,12 @@ export function ReorderableList({
   entityKey,
   initialRows,
   toggleField,
+  reorderable = true,
 }: {
   entityKey: string;
   initialRows: ReorderableRow[];
   toggleField?: ToggleFieldConfig;
+  reorderable?: boolean;
 }) {
   const [rows, setRows] = useState(initialRows);
   const [dirty, setDirty] = useState(false);
@@ -125,7 +127,7 @@ export function ReorderableList({
           return (
             <div
               key={row.id}
-              draggable
+              draggable={reorderable}
               onDragStart={() => {
                 dragIndex.current = i;
               }}
@@ -139,6 +141,8 @@ export function ReorderableList({
               }}
               className="flex items-center gap-3 py-4"
             >
+              {reorderable && (
+              <>
               <span
                 aria-hidden="true"
                 className="cursor-grab select-none text-fg-faint"
@@ -167,6 +171,8 @@ export function ReorderableList({
                   ▼
                 </button>
               </div>
+              </>
+              )}
 
               <Link href={`/admin/${entityKey}/${row.id}`} className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-fg">{row.title}</p>
