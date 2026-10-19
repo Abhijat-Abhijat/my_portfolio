@@ -28,6 +28,8 @@ export function CommandPalette({ projects, email, github, linkedin }: PalettePro
         ["#about", "About"],
         ["#tools", "Toolbox"],
         ["#journal", "Journal"],
+        ["#wins", "Wins & papers"],
+        ["#certificates", "Certificates"],
         ["#notes", "Notebook"],
         ["#contact", "Say hello"],
       ].map(([hash, label]) => ({ label: `Go to ${label}`, hint: "go", run: go(hash) })),

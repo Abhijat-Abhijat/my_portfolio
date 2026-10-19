@@ -5,6 +5,8 @@ import { About } from "@/components/about";
 import { Skills } from "@/components/skills";
 import { ExperienceTimeline } from "@/components/experience-timeline";
 import { Writing } from "@/components/writing";
+import { Wins } from "@/components/wins";
+import { CertificatesSection } from "@/components/certificates-section";
 import { HallOfHackers } from "@/components/hall-of-hackers";
 import { Contact } from "@/components/contact";
 import { getSiteSettings } from "@/lib/content/site-settings";
@@ -37,6 +39,8 @@ export default async function Home() {
       <About />
       <Skills />
       <ExperienceTimeline limit={5} />
+      <Wins />
+      <CertificatesSection />
       <Writing />
       <HallOfHackers />
       <Contact />

@@ -5,6 +5,7 @@ export const navLinks = [
   { label: "About", href: "/#about", section: null },
   { label: "Toolbox", href: "/#tools", section: null },
   { label: "Journal", href: "/#journal", section: "/experience" },
+  { label: "Wins", href: "/#wins", section: "/achievements" },
   { label: "Notes", href: "/#notes", section: "/blog" },
   { label: "Say hi", href: "/#contact", section: null },
 ] as const;

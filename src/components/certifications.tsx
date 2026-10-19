@@ -1,11 +1,11 @@
 import { Reveal } from "@/components/reveal";
 import { getCertifications } from "@/lib/content/certifications";
 
-export async function Certifications() {
+export async function Certifications({ compact = false }: { compact?: boolean } = {}) {
   const certifications = await getCertifications();
 
   return (
-    <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <ul className={compact ? "grid gap-5 sm:grid-cols-2" : "grid gap-6 sm:grid-cols-2 lg:grid-cols-3"}>
       {certifications.map((c, i) => (
         <Reveal key={c.id} delay={(i % 3) * 70}>
           <li
