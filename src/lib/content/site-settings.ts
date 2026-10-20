@@ -52,8 +52,3 @@ export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
     siteUrl: row.site_url,
   };
 });
-
-/** Strips the protocol for display, e.g. "https://github.com/x" → "github.com/x". */
-export function displayUrl(url: string) {
-  return url.replace(/^https?:\/\//, "");
-}

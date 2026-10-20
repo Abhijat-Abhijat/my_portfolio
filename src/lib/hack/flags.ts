@@ -11,8 +11,7 @@ export const FLAGS: Record<string, string> = {
 };
 export const FLAG_LIST = Object.keys(FLAGS);
 
-export const HINT_PENALTY_MS = 60_000;
-export const HANDLE_RE = /^[a-z0-9_.-]{2,20}$/i;
+const HANDLE_RE = /^[a-z0-9_.-]{2,20}$/i;
 const MIN_MS = 20_000; // nobody finds four flags in under 20 seconds
 const MAX_MS = 7 * 24 * 60 * 60 * 1000;
 const MAX_HINTS = 20;
